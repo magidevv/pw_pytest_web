@@ -17,22 +17,35 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.x
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install pipenv
-          pipenv install --dev --skip-lock
+          pipenv install --system
+          playwright install
+          pipenv install python-dotenv
 
       - name: Run tests
-        run: |
-          pipenv run pytest
+        run: pytest
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Allure Report action from marketplace
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        #id: allure-report
         with:
-          deploy_key: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./reports
-          publish_branch: reports
+          allure_results: reports
+          #gh_pages: gh-pages
+          #allure_report: allure-report
+          allure_history: allure-history
+          keep_reports: 20
+      - name: Deploy report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v2
+        env:
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_BRANCH: reports
+          PUBLISH_DIR: allure-history
