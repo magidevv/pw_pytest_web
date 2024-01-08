@@ -28,6 +28,7 @@ jobs:
           pipenv install --system
           playwright install
           pipenv install python-dotenv
+          pipenv install faker
 
       - name: Run tests
         run: pytest
