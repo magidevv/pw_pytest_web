@@ -31,9 +31,8 @@ class ContactUsPage(BasePage):
 
     def click_ok_btn(self) -> None:
         def handle_dialog(dialog):
-            print(f'Dialog message: {dialog.message}')
             dialog.accept()
-
+    
         self.page.on('dialog', handle_dialog)
         self.click_element(self.__submit_btn)
 
