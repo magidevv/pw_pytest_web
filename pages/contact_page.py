@@ -37,6 +37,7 @@ class ContactUsPage(BasePage):
         self.click_element(self.__submit_btn)
 
     def check_alert_success(self) -> None:
+        self.get_element(self.__alert_success_msg).wait_for(state='visible')
         self.is_element_visible(self.__alert_success_msg)
 
     def click_home_btn(self) -> None:
